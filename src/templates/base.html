@@ -2,10 +2,12 @@
 <html>
     <head>
         <title>Saas</title>
+        {% include 'base/css.html' %}
     </head>
     <body>
-        <h1>Hello World</h1>
-        {{queryset}}
-        {{path}}
+        {% include 'nav/navbar.html' %}
+        {% block content %}
+        {% endblock %}
+        {% include 'base/js.html' %}
     </body>
 </html>
