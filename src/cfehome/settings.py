@@ -29,6 +29,7 @@ SECRET_KEY = config("DJANGO_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = os.environ.get("DEBUG") or False
 DEBUG = config("DJANGO_DEBUG", cast=bool)
+print("DEBUG ", DEBUG, type(DEBUG))
 
 ALLOWED_HOSTS = [".railway.app"]  # Example https://saas.prod.railway.app
 
@@ -55,6 +56,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -94,7 +96,7 @@ DATABASES = {
     }
 }
 CONN_MAX_AGE = config("CONN_MAX_AGE", cast=int, default=30)
-DATABASE_URL = config("DATABASE_URL", default=None)
+DATABASE_URL = config("DATABASE_URL", cast=str)
 
 if DATABASE_URL is not None:
     DATABASES = {
@@ -151,6 +153,12 @@ STATICFILES_DIRS = [STATICFILES_BASE_DIR]
 
 # output for python manage.py collectstatic
 STATIC_ROOT = BASE_DIR.parent / "local-cdn"
+
+STORAGES = {
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    }
+}
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
